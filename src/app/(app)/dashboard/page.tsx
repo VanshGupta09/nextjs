@@ -108,10 +108,10 @@ const Page = () => {
 
   const username = session?.user.username;
 
-  const [profileUrl, setprofileUrl] = useState("");
+  // const [profileUrl, setprofileUrl] = useState("");
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(profileUrl);
+    navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}`);
     toast({
       title: "URL copied",
       description: "Profile url has been copied to clipboard",
@@ -122,13 +122,13 @@ const Page = () => {
     return <div>Please login</div>;
   }
 
-  useEffect(() => {
-    if (typeof window !== undefined) {
-      const baseUrl = `${window.location.protocol}//${window.location.host}`;
+  // useEffect(() => {
+  //   if (typeof window !== undefined) {
+  //     const baseUrl = `${window.location.protocol}//${window.location.host}`;
 
-      setprofileUrl(`${baseUrl}/u/${username}`);
-    }
-  }, [window]);
+  //     setprofileUrl(`${baseUrl}/u/${username}`);
+  //   }
+  // }, [window]);
 
   return (
     <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
@@ -139,7 +139,7 @@ const Page = () => {
         <div className="flex items-center">
           <input
             type="text"
-            value={profileUrl}
+            value={`${window.location.protocol}//${window.location.host}`}
             disabled
             className="input input-bordered w-full p-2 mr-2"
           />
