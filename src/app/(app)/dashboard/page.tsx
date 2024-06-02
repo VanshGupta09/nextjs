@@ -139,7 +139,7 @@ const Page = () => {
         <div className="flex items-center">
           <input
             type="text"
-            value={`${window.location.protocol}//${window.location.host}`}
+            value={`${window.location.protocol}//${window.location.host}/u/${username}`}
             disabled
             className="input input-bordered w-full p-2 mr-2"
           />
