@@ -1,7 +1,5 @@
 "use client";
-
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -24,7 +22,7 @@ import axios, { AxiosError } from "axios";
 import { useToast } from "@/components/ui/use-toast";
 import { ApiResponse } from "@/types/apiResponse";
 
-const page = () => {
+const Page = () => {
   const { username } = useParams<{ username: string }>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -141,4 +139,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
