@@ -111,7 +111,7 @@ const Page = () => {
   // const [profileUrl, setprofileUrl] = useState("");
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}`);
+    navigator.clipboard.writeText(`${window.location.protocol}//${window.location.host}/u/${username}`);
     toast({
       title: "URL copied",
       description: "Profile url has been copied to clipboard",
