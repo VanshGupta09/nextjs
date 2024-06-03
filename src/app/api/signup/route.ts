@@ -69,8 +69,8 @@ export async function POST(request: Request) {
       await newUser.save();
     }
     console.log("sending mail started");
-    
-    const transporter = nodemailer.createTransport({
+
+    const transporter = await nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 587,
       secure: false, // Upgrade later with STARTTLS
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
     };
 
     // Send email
-    transporter.sendMail(mailOptions, (err: any, info: any) => {
+    await transporter.sendMail(mailOptions, (err: any, info: any) => {
       if (err) {
         console.error("Error occurred:", err.message);
         return;

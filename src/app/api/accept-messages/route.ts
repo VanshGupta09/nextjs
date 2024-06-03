@@ -91,6 +91,7 @@ export async function GET(request: Request) {
       {
         success: true,
         message: 'Message acceptance status updated successfully',
+        isAcceptingMsgs:foundUser.isAcceptingMsgs
       },
       { status: 200 }
     );

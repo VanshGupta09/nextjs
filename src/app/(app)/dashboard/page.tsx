@@ -36,6 +36,7 @@ const Page = () => {
     try {
       const res = await axios.get<ApiResponse>("api/accept-messages");
       setValue("acceptMsgs", res.data?.isAcceptingMsgs);
+      
     } catch (error) {
       const axiosErr = error as AxiosError<ApiResponse>;
       toast({
