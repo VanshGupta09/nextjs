@@ -8,16 +8,16 @@ const UsernameQuerySchema = z.object({
 });
 
 export async function GET(request: Request) {
-   await connectDB();
+  await connectDB();
   try {
     const { searchParams } = new URL(request.url);
     const queryParam = { username: searchParams.get("username") };
 
     // username validation using zod
     const result = UsernameQuerySchema.safeParse(queryParam);
-    console.log(result);
 
     if (!result.success) {
+      
       const usernameErrors = result.error.format().username?._errors || [];
       return Response.json(
         {
@@ -31,12 +31,12 @@ export async function GET(request: Request) {
       );
     }
     const { username } = result.data;
-
+    
     const existingVerifiedUser = await UserModel.findOne({
       username,
-      isVerifred: true,
+      isVerified: true,
     });
-
+    
     if (existingVerifiedUser) {
       return Response.json(
         {
