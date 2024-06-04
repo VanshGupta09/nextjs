@@ -72,8 +72,8 @@ export async function POST(request: Request) {
 
     const transporter =  nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 587,
-      secure: false, // Upgrade later with STARTTLS
+      port: 465,//587
+      service: process.env.MAIL_SERVICE,
       auth: {
         user: process.env.MAIL,
         pass: process.env.MAIL_PASSWORD,
@@ -92,17 +92,17 @@ export async function POST(request: Request) {
      transporter.sendMail(mailOptions, (err: any, info: any) => {
       if (err) {
         console.error("Error occurred:", err.message);
-        return;
+        return Response.json(
+          {
+            success: false,
+            message: err.message,
+          },
+          { status: 500 }
+        );
+        
       }
       console.log("Email sent successfully!");
       console.log("Message ID:", info.messageId);
-      return Response.json(
-        {
-          success: false,
-          message: err.message,
-        },
-        { status: 500 }
-      );
     });
 
     // send verification email
