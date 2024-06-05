@@ -74,9 +74,13 @@ export async function POST(request: Request) {
       host: "smtp.gmail.com",
       port: 587,//587 465
       service: process.env.MAIL_SERVICE,
+      secure: true, 
       auth: {
         user: process.env.MAIL,
         pass: process.env.MAIL_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     });
 
