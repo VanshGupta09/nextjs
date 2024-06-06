@@ -68,27 +68,17 @@ export async function POST(request: Request) {
       await newUser.save();
     }
 
-    // const transporter =  nodemailer.createTransport({
-    //   host: "smtp.gmail.com",
-    //   port: 465,//587 465
-    //   service: process.env.MAIL_SERVICE,
-    //   secure:true,
-    //   auth: {
-    //     user: process.env.MAIL,
-    //     pass: process.env.MAIL_PASSWORD,
-    //   },
-    // });
-
-    const transporter = await nodemailer.createTransport({
+    const transporter =  nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 465, //587 465
-      service: "gmail",
-      secure: true,
+      port: 465,//587 465
+      service: process.env.MAIL_SERVICE,
+      secure:true,
       auth: {
-        user: "anonymousmessagesweb@gmail.com",
-        pass: "auny jvqz jpxb krza",
+        user: process.env.MAIL,
+        pass: process.env.MAIL_PASSWORD,
       },
     });
+
 
     // Define email options
     const mailOptions = {
@@ -98,7 +88,6 @@ export async function POST(request: Request) {
       text: `Here's your verification code: ${verifyCode}\n\nHello ${username}\n\nThank you for registering. Please use the following verification code to complete your registration:\n\n${verifyCode}\n\nIf you did not request this code, please ignore this email.`,
     };
 
-    let isMailSent = false;
     // Send email
     await transporter.sendMail(mailOptions, (err: any, info: any) => {
       if (err) {
@@ -113,10 +102,8 @@ export async function POST(request: Request) {
       }
       console.log("Email sent successfully!");
       console.log("Message ID:", info.messageId);
-      isMailSent = true;
     });
 
-    if(isMailSent){
     return Response.json(
       {
         success: true,
@@ -124,7 +111,7 @@ export async function POST(request: Request) {
       },
       { status: 201 }
     );
-  }
+
     // send verification email
     // const emailResponse = await sendVerificationEmail(
     //   email,
