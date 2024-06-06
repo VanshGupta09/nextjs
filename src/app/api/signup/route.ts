@@ -68,7 +68,6 @@ export async function POST(request: Request) {
 
       await newUser.save();
     }
-    console.log("sending mail started");
 
     const transporter =  nodemailer.createTransport({
       host: "smtp.gmail.com",
