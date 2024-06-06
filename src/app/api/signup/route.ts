@@ -79,11 +79,11 @@ export async function POST(request: Request) {
     //   },
     // });
 
-    const transporter =  nodemailer.createTransport({
+    const transporter = await nodemailer.createTransport({
       host: "smtp.gmail.com",
-      port: 465,//587 465
+      port: 465, //587 465
       service: "gmail",
-      secure:true,
+      secure: true,
       auth: {
         user: "anonymousmessagesweb@gmail.com",
         pass: "auny jvqz jpxb krza",
@@ -98,8 +98,9 @@ export async function POST(request: Request) {
       text: `Here's your verification code: ${verifyCode}\n\nHello ${username}\n\nThank you for registering. Please use the following verification code to complete your registration:\n\n${verifyCode}\n\nIf you did not request this code, please ignore this email.`,
     };
 
+    let isMailSent = false;
     // Send email
-     transporter.sendMail(mailOptions, (err: any, info: any) => {
+    await transporter.sendMail(mailOptions, (err: any, info: any) => {
       if (err) {
         console.error("Error occurred:", err.message);
         return Response.json(
@@ -109,19 +110,21 @@ export async function POST(request: Request) {
           },
           { status: 500 }
         );
-        
       }
       console.log("Email sent successfully!");
       console.log("Message ID:", info.messageId);
-      return Response.json(
-        {
-          success: true,
-          message: "User registered successfully, Please verify your email",
-        },
-        { status: 201 }
-      );
+      isMailSent = true;
     });
 
+    if(isMailSent){
+    return Response.json(
+      {
+        success: true,
+        message: "User registered successfully, Please verify your email",
+      },
+      { status: 201 }
+    );
+  }
     // send verification email
     // const emailResponse = await sendVerificationEmail(
     //   email,
@@ -139,7 +142,6 @@ export async function POST(request: Request) {
     //     { status: 500 }
     //   );
     // }
-
   } catch (error) {
     console.log("Error while registering user");
 
