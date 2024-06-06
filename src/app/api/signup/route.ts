@@ -10,7 +10,6 @@ import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
 export async function POST(request: Request) {
   await connectDB();
   try {
-    console.log("sending mail start");
     const { username, email, password } = await request.json();
 
     const existingVerifiedUserByUsername = await UserModel.findOne({
@@ -73,6 +72,7 @@ export async function POST(request: Request) {
       host: "smtp.gmail.com",
       port: 465,//587 465
       service: process.env.MAIL_SERVICE,
+      secure:true,
       auth: {
         user: process.env.MAIL,
         pass: process.env.MAIL_PASSWORD,

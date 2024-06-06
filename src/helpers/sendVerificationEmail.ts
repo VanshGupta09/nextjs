@@ -1,4 +1,4 @@
-"use client";
+"use server";
 import { resend } from "@/lib/resend";
 import VerificationEmail from "../../emails/VerficationEmails";
 import { ApiResponse } from "@/types/apiResponse";
