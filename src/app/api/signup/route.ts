@@ -68,20 +68,31 @@ export async function POST(request: Request) {
       await newUser.save();
     }
 
+    // const transporter =  nodemailer.createTransport({
+    //   host: "smtp.gmail.com",
+    //   port: 465,//587 465
+    //   service: process.env.MAIL_SERVICE,
+    //   secure:true,
+    //   auth: {
+    //     user: process.env.MAIL,
+    //     pass: process.env.MAIL_PASSWORD,
+    //   },
+    // });
+
     const transporter =  nodemailer.createTransport({
       host: "smtp.gmail.com",
       port: 465,//587 465
-      service: process.env.MAIL_SERVICE,
+      service: "gmail",
       secure:true,
       auth: {
-        user: process.env.MAIL,
-        pass: process.env.MAIL_PASSWORD,
+        user: "anonymousmessagesweb@gmail.com",
+        pass: "auny jvqz jpxb krza",
       },
     });
 
     // Define email options
     const mailOptions = {
-      from: process.env.MAIL,
+      from: "anonymousmessagesweb@gmail.com",
       to: email,
       subject: "Anonymous messages - Verification Code",
       text: `Here's your verification code: ${verifyCode}\n\nHello ${username}\n\nThank you for registering. Please use the following verification code to complete your registration:\n\n${verifyCode}\n\nIf you did not request this code, please ignore this email.`,
