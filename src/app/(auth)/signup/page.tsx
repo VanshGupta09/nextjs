@@ -94,6 +94,8 @@ const Page = () => {
 
   useEffect(() => {
     checkUniqueUsername();
+    console.log(process.env.MAIL);
+    
   }, [debouncedUsername]);
 
   return (
