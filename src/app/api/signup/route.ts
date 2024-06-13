@@ -68,7 +68,7 @@ export async function POST(request: Request) {
       await newUser.save();
     }
 
-    const transporter =  nodemailer.createTransport({
+    const transporter = await nodemailer.createTransport({
       // host: "smtp.gmail.com",
       // port: 465,//587 465
       service: process.env.MAIL_SERVICE,
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
     };
 
     // Send email
-     transporter.sendMail(mailOptions, (err: any, info: any) => {
+    await transporter.sendMail(mailOptions, (err: any, info: any) => {
       if (err) {
         console.error("Error occurred:", err.message);
         return Response.json(
