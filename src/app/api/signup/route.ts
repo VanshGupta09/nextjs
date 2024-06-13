@@ -42,14 +42,87 @@ export async function POST(request: Request) {
       } else {
         const hashedPass = await bcrypt.hash(password, 10);
         existingVerifiedUserByEmail.password = hashedPass;
+        existingVerifiedUserByEmail.username = username;
         existingVerifiedUserByEmail.verificationCode = verifyCode;
         existingVerifiedUserByEmail.verificationCodeExpiry = new Date(
           Date.now() + 60 * 60 * 1000
         );
 
         await existingVerifiedUserByEmail.save();
+        const transporter = await nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465, //587 465
+          // service: process.env.MAIL_SERVICE,
+          service: "gmail",
+          // secure:true,
+          auth: {
+            user: process.env.MAIL,
+            pass: process.env.MAIL_PASSWORD,
+          },
+        });
+  
+        // Define email options
+        const mailOptions = {
+          from: "anonymousmessagesweb@gmail.com",
+          to: email,
+          subject: "Anonymous messages - Verification Code",
+          text: `Here's your verification code: ${verifyCode}\n\nHello ${username}\n\nThank you for registering. Please use the following verification code to complete your registration:\n\n${verifyCode}\n\nIf you did not request this code, please ignore this email.`,
+        };
+  
+        // Send email
+        await transporter.sendMail(mailOptions, (err: any, info: any) => {
+          if (err) {
+            console.error("Error occurred:", err.message);
+            return Response.json(
+              {
+                success: false,
+                message: err.message,
+              },
+              { status: 500 }
+            );
+          }
+          console.log("Email sent successfully!");
+          console.log("Message ID:", info.messageId);
+        });
+  
       }
     } else {
+      const transporter = await nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465, //587 465
+        // service: process.env.MAIL_SERVICE,
+        service: "gmail",
+        // secure:true,
+        auth: {
+          user: process.env.MAIL,
+          pass: process.env.MAIL_PASSWORD,
+        },
+      });
+
+      // Define email options
+      const mailOptions = {
+        from: "anonymousmessagesweb@gmail.com",
+        to: email,
+        subject: "Anonymous messages - Verification Code",
+        text: `Here's your verification code: ${verifyCode}\n\nHello ${username}\n\nThank you for registering. Please use the following verification code to complete your registration:\n\n${verifyCode}\n\nIf you did not request this code, please ignore this email.`,
+      };
+
+      // Send email
+      await transporter.sendMail(mailOptions, (err: any, info: any) => {
+        if (err) {
+          console.error("Error occurred:", err.message);
+          return Response.json(
+            {
+              success: false,
+              message: err.message,
+            },
+            { status: 500 }
+          );
+        }
+        console.log("Email sent successfully!");
+        console.log("Message ID:", info.messageId);
+      });
+
       const hashedPass = await bcrypt.hash(password, 10);
       const expiryDate = new Date();
       expiryDate.setHours(expiryDate.getHours() + 1);
@@ -67,42 +140,6 @@ export async function POST(request: Request) {
 
       await newUser.save();
     }
-
-    const transporter = await nodemailer.createTransport({
-      // host: "smtp.gmail.com",
-      // port: 465,//587 465
-      service: process.env.MAIL_SERVICE,
-      // secure:true,
-      auth: {
-        user: process.env.MAIL,
-        pass: process.env.MAIL_PASSWORD,
-      },
-    });
-
-
-    // Define email options
-    const mailOptions = {
-      from: "anonymousmessagesweb@gmail.com",
-      to: email,
-      subject: "Anonymous messages - Verification Code",
-      text: `Here's your verification code: ${verifyCode}\n\nHello ${username}\n\nThank you for registering. Please use the following verification code to complete your registration:\n\n${verifyCode}\n\nIf you did not request this code, please ignore this email.`,
-    };
-
-    // Send email
-    await transporter.sendMail(mailOptions, (err: any, info: any) => {
-      if (err) {
-        console.error("Error occurred:", err.message);
-        return Response.json(
-          {
-            success: false,
-            message: err.message,
-          },
-          { status: 500 }
-        );
-      }
-      console.log("Email sent successfully!");
-      console.log("Message ID:", info.messageId);
-    });
 
     return Response.json(
       {
