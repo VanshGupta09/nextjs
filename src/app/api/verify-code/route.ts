@@ -7,7 +7,7 @@ export async function POST(request: Request) {
     const { username, code } = await request.json();
     const decodedUsername = decodeURIComponent(username);
     const user = await UserModel.findOne({ username: decodedUsername });
-
+    
     if (!user) {
       return Response.json(
         {
@@ -16,10 +16,10 @@ export async function POST(request: Request) {
         },
         { status: 400 }
       );
-    }
-
-    const isCodeValid = user.verificationCode === code;
-    const isCodeNotExpired = new Date(user.verificationCodeExpiry) > new Date();
+      }
+      
+      const isCodeValid = user.verificationCode === code;
+      const isCodeNotExpired = new Date(user.verificationCodeExpiry) > new Date();
 
     if (isCodeValid && isCodeNotExpired) {
       user.isVerified = true;
@@ -40,15 +40,14 @@ export async function POST(request: Request) {
         },
         { status: 400 }
       );
-    }else{
-        return Response.json(
-            {
-              success: false,
-              message:
-                "Invalid verification code ",
-            },
-            { status: 400 }
-          );
+    } else {
+      return Response.json(
+        {
+          success: false,
+          message: "Invalid verification code ",
+        },
+        { status: 400 }
+      );
     }
   } catch (error) {
     console.error("Error while verfying code", error);
