@@ -49,7 +49,7 @@ export async function POST(request: Request) {
         );
 
         await existingVerifiedUserByEmail.save();
-        const transporter = await nodemailer.createTransport({
+        const transporter = nodemailer.createTransport({
           // host: "smtp.gmail.com",
           // port: 465, //587 465
           // service: process.env.MAIL_SERVICE,
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
             pass: process.env.MAIL_PASSWORD,
           },
         });
-  
+
         // Define email options
         const mailOptions = {
           from: "anonymousmessagesweb@gmail.com",
@@ -68,9 +68,9 @@ export async function POST(request: Request) {
           subject: "Anonymous messages - Verification Code",
           text: `Here's your verification code: ${verifyCode}\n\nHello ${username}\n\nThank you for registering. Please use the following verification code to complete your registration:\n\n${verifyCode}\n\nIf you did not request this code, please ignore this email.`,
         };
-  
+
         // Send email
-        await transporter.sendMail(mailOptions, (err: any, info: any) => {
+        transporter.sendMail(mailOptions, (err: any, info: any) => {
           if (err) {
             console.error("Error occurred:", err.message);
             return Response.json(
@@ -84,7 +84,6 @@ export async function POST(request: Request) {
           console.log("Email sent successfully!");
           console.log("Message ID:", info.messageId);
         });
-  
       }
     } else {
       const transporter = await nodemailer.createTransport({
