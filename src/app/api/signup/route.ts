@@ -50,8 +50,8 @@ export async function POST(request: Request) {
 
         await existingVerifiedUserByEmail.save();
         const transporter = await nodemailer.createTransport({
-          host: "smtp.gmail.com",
-          port: 465, //587 465
+          // host: "smtp.gmail.com",
+          // port: 465, //587 465
           // service: process.env.MAIL_SERVICE,
           service: "gmail",
           // secure:true,
